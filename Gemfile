@@ -11,6 +11,8 @@ gem 'jbuilder', '~> 2.0'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'kaminari'
+gem 'rest-client'
+gem 'carrierwave-aliyun'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
