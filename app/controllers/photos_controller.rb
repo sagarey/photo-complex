@@ -5,6 +5,7 @@ class PhotosController < ApplicationController
   # GET /photos.json
   def index
     @photos = Photo.order(created_at: :desc).page params[:page]
+    @tags = Tag.all
   end
 
   # GET /photos/1

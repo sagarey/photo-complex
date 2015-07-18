@@ -13,11 +13,11 @@
 
 <div class="field">
   <%= f.label :title %><br>
-  <%= f.text_field :title %>
+  <%= f.text_field :title, required: true %>
 </div>
 <div class="field">
   <%= f.label :picture %><br>
-  <%= f.file_field :picture, accept: 'image/jpeg, image/gif, image/png, image/bmp' %>
+  <%= f.file_field :picture, required: true, accept: 'image/jpeg, image/gif, image/png, image/bmp' %>
 </div>
 <div class="actions">
   <%= f.submit %>
