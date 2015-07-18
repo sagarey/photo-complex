@@ -2,6 +2,10 @@
 
 <h1>Listing Photos</h1>
 
+<div id="paginator_info">
+  <%= page_entries_info @photos %>
+</div>
+
 <table>
   <thead>
     <tr>
@@ -10,19 +14,13 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-
-  <tbody>
-    <% @photos.each do |photo| %>
-      <tr>
-        <td><%= photo.title %></td>
-        <td><%= image_tag photo.picture.thumb.url if photo.picture? %></td>
-        <td><%= link_to 'Show', photo %></td>
-        <td><%= link_to 'Edit', edit_photo_path(photo) %></td>
-        <td><%= link_to 'Destroy', photo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+  <tbody id="photos">
+    <%= render @photos %>
   </tbody>
 </table>
+<div id="paginator">
+  <%= paginate @photos, right: 2, remote: true %>
+</div>
 
 <br>
 

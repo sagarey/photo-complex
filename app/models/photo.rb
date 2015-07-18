@@ -3,6 +3,7 @@ class Photo < ActiveRecord::Base
   mount_uploader :picture, PictureUploader
   validates :title, presence: true, length: { minimum: 2 }
   validate :picture_size
+  paginates_per 3
 
   private
     def picture_size
