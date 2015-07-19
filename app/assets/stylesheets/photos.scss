@@ -35,3 +35,16 @@
   max-height: 500px;
   overflow: auto;
 }
+
+#tag_new {
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: transparent;
+  border: 0;
+  width: 100%;
+  border-radius: 0;
+  border-bottom: 1px solid #337ab7;
+}
+#tag_new:focus {
+  outline: 0;
+}

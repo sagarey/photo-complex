@@ -2,6 +2,7 @@
 <li class="tag-li" name="untag" role="presentation" id="tag_untag"><%= link_to "untag", untag_photos_path, remote: true %></li>
 <% unless @tags.blank? %>
 <% @tags.each do |tag| %>
-<li draggable="true" ondrop="setTag(event)" ondragend="endDrag(event)" ondragover="allowDrop(event)" class="tag-li" name="<%= tag.id %>" id="tag_<%= tag.content %>" role="presentation"><%= link_to tag.content, tag, remote: true, id: "tag_#{tag.id}" %></li>
+<li draggable="true" ondragstart="getTag(event)" ondrop="setTag(event)" ondragend="endDrag(event)" ondragover="allowDrop(event)" class="tag-li" name="<%= tag.id %>" id="tag_<%= tag.content %>" role="presentation"><%= link_to tag.content, tag, remote: true, id: "tag_#{tag.id}" %></li>
 <% end %>
 <% end %>
+<li><input id="tag_new" onblur="createTag(this)" type="text" placeholder="new tag"></li>

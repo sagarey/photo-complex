@@ -26,7 +26,8 @@ class TagsController < ApplicationController
   # POST /tags.json
   def create
     @tag = Tag.new(tag_params)
-
+    @tags = Tag.all
+    @active = params[:active]
     respond_to do |format|
       if @tag.save
         format.html { redirect_to @tag, notice: 'Tag was successfully created.' }
@@ -35,6 +36,7 @@ class TagsController < ApplicationController
         format.html { render :new }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
+      format.js { render :destroy }
     end
   end
 
@@ -56,9 +58,10 @@ class TagsController < ApplicationController
   # DELETE /tags/1.json
   def destroy
     @tag.destroy
+    @tags = Tag.all
+    @active = params[:active]
     respond_to do |format|
-      format.html { redirect_to tags_url, notice: 'Tag was successfully destroyed.' }
-      format.json { head :no_content }
+      format.js
     end
   end
 

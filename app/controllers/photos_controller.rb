@@ -73,9 +73,16 @@ class PhotosController < ApplicationController
   # DELETE /photos/1.json
   def destroy
     @photo.destroy
+    tag = params[:active].split('_').last
+    if tag == 'untag'
+      @photos = Photo.where.not(id: PhotosTag.select('photo_id')).order(created_at: :desc).page params[:page]
+    elsif tag == 'all'
+      @photos = Photo.order(created_at: :desc).page params[:page]
+    else
+      @photos = Tag.where(content: tag).first.photos.order(created_at: :desc).page params[:page]
+    end
     respond_to do |format|
-      format.html { redirect_to photos_url, notice: 'Photo was successfully destroyed.' }
-      format.json { head :no_content }
+      format.js { render :index }
     end
   end
 
