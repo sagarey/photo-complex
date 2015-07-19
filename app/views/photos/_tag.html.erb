@@ -1,0 +1,4 @@
+<i class="fa fa-tag"></i>
+<% @photo.tags.each do |tag| %>
+<span name="<%= @photo.id %>_<%= tag.id %>" contentEditable class="badge" onblur="updateTag(this)"><%= tag.content %></span>
+<% end %>

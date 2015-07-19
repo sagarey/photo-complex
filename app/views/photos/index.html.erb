@@ -1,0 +1,287 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <h4 class="top-info"><i class="fa fa-tags"></i> tags</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <ul id="tags_ul" class="nav nav-pills nav-stacked">
+            <%= render partial: "tags/tag", object: @tags %>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <br>
+          <a id="trash" ondrop="delObj(event)" ondragover="allowDrop(event)" href="#" class="btn btn-block btn-danger" style="display: none"><i class="fa fa-trash-o"></i></a href="#">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-2">
+            <h4 id="photo_upload" class="top-info">
+              <i class="fa fa-upload"></i> <%= link_to "upload", "#", "data-toggle": "modal", "data-target": "#photo_new" %>
+            </h4>
+            <h4 id="upload_status" class="top-info" style="display: none">
+              <i class="fa fa-upload"></i> <%= link_to "upload", "#", "data-toggle": "modal", "data-target": "#photo_new" %>
+            </h4>
+          </div>
+          <div class="col-md-5">
+            <span id="notice"><%= notice %></span>
+          </div>
+          <div class="col-md-5 text-right">
+            <h4 class="top-info" id="paginator_info">
+              <i class="fa fa-file-photo-o"></i> <%= page_entries_info @photos %>
+            </h4>
+          </div>
+        </div>
+        <div id="photos" class="row">
+          <%= render @photos %>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="paginator">
+              <%= paginate @photos, right: 1, remote: true %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="photo_new" tabindex="-1" role="dialog" aria-labelledby="photo_new_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="photo_new_label">Upload photo</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-5"><a href="#" id="pic_drop" class="pic-drop btn btn-block btn-lg" ondragover="allowDrop(event)" ondrop="previewPic(event)" >Drop picture here</a></div>
+            <div class="col-md-2"><a href="#" class="btn btn-link btn-lg disabled" role="button"><span class="badge">or</span></a></div>
+            <div class="col-md-5"><input id="pic_file" type="file" class="hidden"><button id="pic_pick" class="btn btn-block btn-primary btn-lg">Select a picture</button></div>
+          </div>
+          <div id="pic_preview" class="hidden row">
+            <div class="col-md-12"><hr></div>
+            <div class="col-md-12">
+              <div class="input-group">
+                <span class="input-group-addon">Title</span>
+                <input id="pic_title" type="text" class="form-control" placeholder="title">
+                <span class="input-group-btn">
+                  <button id="pic_upload" class="btn btn-primary" type="button">Upload!</button>
+                </span>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="thumbnail preview-thumbnail">
+                <img id="preview" src="" alt="Picture preview">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    active = "tag_all";
+    $('#' + active).addClass('active');
+
+    $('#tags_ul').on('click', '.tag-li', function(event) {
+      $(".tag-li").removeClass("active");
+      $(this).addClass("active");
+      active = $(this).attr('id');
+    });
+
+    $("#pic_pick").bind('click', function() {
+      $("#pic_file").click();
+    });
+
+    $('#pic_file').bind('change', function(){
+      file = this.files[0];
+      var size_in_megabytes = file.size/1024/1024;
+      if (size_in_megabytes > 5) {
+        alert('Maximum file size is 5MB. Please choose a smaller file.');
+      }
+      var reader = new FileReader();
+      reader.onload = function(event){
+        $('#preview').attr('src', event.target.result);
+        $('#pic_title').val(file.name.split('.').slice(0, -1).join('.'));
+        $('#pic_preview').removeClass('hidden');
+      }
+      reader.readAsDataURL(file);
+    });
+
+    $('#pic_upload').bind('click', function(event){
+      $('#photo_upload').hide();
+      $('#upload_status').html('<i class="fa fa-spinner fa-pulse"></i> uploading ');
+      $('#upload_status').show();
+      $('#photo_new').modal('hide');
+      var formdata=new FormData();
+      formdata.append('photo[title]', $('#pic_title').val());
+      formdata.append('photo[picture]', file);
+      $.ajax({
+        type: 'POST',
+        url: '<%= photos_path %>',
+        data: formdata,
+        contentType: false,
+        processData: false,
+        success: function(result){
+          if (result == 'true') {
+            $('#upload_status').html('<i class="fa fa-check text-success"></i> success');
+          } else{
+            $('#upload_status').html('<i class="fa fa-check text-danger"></i> fail');
+          };
+          $('#upload_status').fadeOut(3000, function(){
+            $('#photo_upload').fadeIn();
+          });
+        },
+        error: function(){
+          $('#upload_status').html('<i class="fa fa-times text-danger"></i> error');
+          $('#upload_status').fadeOut(3000, function(){
+            $('#photo_upload').fadeIn();
+          });
+        }
+      });
+    });
+
+function previewPic(event){
+  event.preventDefault();
+  var fileList = event.dataTransfer.files;
+  if(fileList.length == 0){
+    return false;
+  }
+  if(fileList[0].type.indexOf('image') === -1){
+    alert("It's not a picture!");
+    return false;
+  }
+  file = fileList[0];
+  var reader = new FileReader();
+  reader.onload = function(event){
+    $('#preview').attr('src', event.target.result);
+    $('#pic_title').val(file.name.split('.').slice(0, -1).join('.'));
+    $('#pic_preview').removeClass('hidden');
+  }
+  reader.readAsDataURL(file);
+};
+
+function allowDrop(event){
+  event.preventDefault();
+};
+
+function setTag(event){
+  event.preventDefault();
+  var photo_id = event.dataTransfer.getData("photo_id").split('_').pop();
+  var tag_id = event.target.id.split('_').pop();
+  var formdata = new FormData();
+  formdata.append('tag_id', tag_id);
+  $.ajax({
+    type: 'POST',
+    url: '<%= photos_path %>/' + photo_id + '/addtag.js',
+    data: formdata,
+    contentType: false,
+    processData: false,
+    success: function(result){
+    },
+    error: function(){
+    }
+  });
+}
+
+function addTag(event){
+  event.preventDefault();
+  var tag_id = event.dataTransfer.getData("tag_id").split('_').pop();
+  var photo_id = event.target.id.split('_').pop();
+  var formdata = new FormData();
+  formdata.append('tag_id', tag_id);
+  $.ajax({
+    type: 'POST',
+    url: '<%= photos_path %>/' + photo_id + '/addtag.js',
+    data: formdata,
+    contentType: false,
+    processData: false,
+    success: function(result){
+    },
+    error: function(){
+    }
+  });
+}
+
+function getPic(event){
+  event.dataTransfer.setData("photo_id", event.target.id);
+  $('#trash').fadeIn();
+}
+
+function getTag(event){
+  event.dataTransfer.setData("tag_id", event.target.id);
+  $('#trash').fadeIn();
+}
+
+function updateTag(tag){
+  var name = $(tag).attr("name").split('_');
+  var tag_id = name.pop();
+  var photo_id = name.pop();
+  var formdata=new FormData();
+  formdata.append('active', active);
+  formdata.append('tag_id', tag_id);
+  formdata.append('tag_content', $(tag).text());
+  $.ajax({
+    type: 'POST',
+    url: '<%= photos_path %>/' + photo_id + '/chtag.js',
+    data: formdata,
+    contentType: false,
+    processData: false,
+    success: function(result){
+    },
+    error: function(){
+    }
+  });
+};
+
+function createTag(tag){
+  $.ajax({
+    type: 'POST',
+    url: '<%= tags_path %>.js',
+    data: { "tag[content]": $(tag).val(), active: active },
+    success: function(result){
+    },
+    error: function(){
+    }
+  });
+};
+
+function endDrag(event){
+  $('#trash').fadeOut();
+}
+
+function delObj(event){
+  event.preventDefault();
+  var photo_id = event.dataTransfer.getData("photo_id").split('_').pop();
+  var tag_id = event.dataTransfer.getData("tag_id").split('_').pop();
+  if(photo_id != ""){
+    $.ajax({
+      type: 'DELETE',
+      url: '<%= photos_path %>/' + photo_id + '.js',
+      data: { active: active },
+      success: function(result){
+      },
+      error: function(){
+      }
+    });
+  };
+  if(tag_id != ""){
+    $.ajax({
+      type: 'DELETE',
+      url: '<%= tags_path %>/' + tag_id + '.js',
+      data: { 'active': active },
+      success: function(result){
+      },
+      error: function(){
+      }
+    });
+  };
+}
+</script>

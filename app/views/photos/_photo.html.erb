@@ -1,0 +1,21 @@
+<div class="col-md-4">
+  <div class="panel panel-default photo-panel">
+    <div class="panel-body">
+      <div class="thumbnail">
+        <%= link_to image_tag(photo.picture.thumb.url, id: "photo_#{photo.id}"), photo, "draggable": true, "ondragover": "allowDrop(event)", "ondragstart": "getPic(event)", "ondragend": "endDrag(event)", "ondrop": "addTag(event)" %>
+      </div>
+    </div>
+    <ul class="list-group">
+      <li id="photo_<%= photo.id %>_tags" class="list-group-item">
+        <i class="fa fa-tag"></i>
+        <% photo.tags.each do |tag| %>
+        <span name="<%= photo.id %>_<%= tag.id %>" contentEditable class="badge" onblur="updateTag(this)"><%= tag.content %></span>
+        <% end %>
+      </li>
+    </ul>
+    <div class="panel-footer">
+      <%= photo.title %>
+      <span class="badge pull-right"><i class="fa fa-clock-o"></i> <%= photo.created_at.getlocal("+08:00").to_s[0..9] %></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,3 @@
+$('#photos').html('<%= escape_javascript render(@photos) %>');
+$('#paginator').html('<%= escape_javascript(paginate(@photos, right: 1, :remote => true).to_s) %>');
+$('#paginator_info').html('<i class="fa fa-file-photo-o"></i> <%= escape_javascript(page_entries_info(@photos).to_s) %>');

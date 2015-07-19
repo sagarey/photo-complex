@@ -1,0 +1,50 @@
+.top-info {
+  margin: 0 0  20px 0;
+}
+
+.pic-drop {
+  border:1px dashed gray;
+}
+
+.preview-thumbnail {
+  margin: 10px 0 8px 0;
+}
+
+.photo-panel {
+  .panel-body {
+    padding: 0;
+    .thumbnail {
+      border-width: 0;
+      margin: 0;
+    }
+  }
+  .panel-footer {
+    padding: 3px 6px;
+  }
+  li {
+    padding: 3px 6px;
+  }
+}
+
+.tag-panel {
+  position: absolute;
+  top: 0px;
+}
+
+#tags_ul {
+  max-height: 500px;
+  overflow: auto;
+}
+
+#tag_new {
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: transparent;
+  border: 0;
+  width: 100%;
+  border-radius: 0;
+  border-bottom: 1px solid #337ab7;
+}
+#tag_new:focus {
+  outline: 0;
+}
