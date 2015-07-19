@@ -1,11 +1,37 @@
 class PhotosController < ApplicationController
-  before_action :set_photo, only: [:show, :edit, :update, :destroy]
+  before_action :set_photo, only: [:addtag, :chtag, :show, :edit, :update, :destroy]
 
   # GET /photos
   # GET /photos.json
   def index
     @photos = Photo.order(created_at: :desc).page params[:page]
     @tags = Tag.all
+  end
+
+  def untag
+    @photos = Photo.where.not(id: PhotosTag.select('photo_id')).order(created_at: :desc).page params[:page]
+    render 'index'
+  end
+
+  def chtag
+    tag_content = params[:tag_content].strip.downcase
+    @photo.tags.destroy Tag.find(params[:tag_id])
+    tag = Tag.where(content: tag_content).first
+    tag = Tag.create(content: tag_content) if tag.blank?
+    @photo.tags << tag
+    @tags = Tag.all
+    @active = params[:active]
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def addtag
+    tag = Tag.find(params[:tag_id])
+    @photo.tags << tag unless @photo.tags.include?(tag)
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /photos/1
@@ -26,16 +52,7 @@ class PhotosController < ApplicationController
   # POST /photos.json
   def create
     @photo = Photo.new(photo_params)
-
-    respond_to do |format|
-      if @photo.save
-        format.html { redirect_to @photo, notice: 'Photo was successfully created.' }
-        format.json { render :show, status: :created, location: @photo }
-      else
-        format.html { render :new }
-        format.json { render json: @photo.errors, status: :unprocessable_entity }
-      end
-    end
+    render plain: @photo.save
   end
 
   # PATCH/PUT /photos/1
@@ -72,4 +89,4 @@ class PhotosController < ApplicationController
     def photo_params
       params.require(:photo).permit(:title, :picture)
     end
-end
+  end

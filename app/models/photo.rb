@@ -1,9 +1,9 @@
 class Photo < ActiveRecord::Base
   has_and_belongs_to_many :tags
   mount_uploader :picture, PictureUploader
-  validates :title, presence: true, length: { minimum: 2 }
+  validates :title, presence: true, length: { minimum: 1 }
   validate :picture_size
-  paginates_per 3
+  paginates_per 6
 
   private
     def picture_size

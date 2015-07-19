@@ -1,3 +1,37 @@
 .top-info {
   margin: 0 0  20px 0;
 }
+
+.pic-drop {
+  border:1px dashed gray;
+}
+
+.preview-thumbnail {
+  margin: 10px 0 8px 0;
+}
+
+.photo-panel {
+  .panel-body {
+    padding: 0;
+    .thumbnail {
+      border-width: 0;
+      margin: 0;
+    }
+  }
+  .panel-footer {
+    padding: 3px 6px;
+  }
+  li {
+    padding: 3px 6px;
+  }
+}
+
+.tag-panel {
+  position: absolute;
+  top: 0px;
+}
+
+#tags_ul {
+  max-height: 500px;
+  overflow: auto;
+}

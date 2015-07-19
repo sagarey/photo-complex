@@ -1,0 +1,7 @@
+<li class="tag-li" role="presentation" id="tag_all"><%= link_to "all", root_path %></li>
+<li class="tag-li" name="untag" role="presentation" id="tag_untag"><%= link_to "untag", untag_photos_path, remote: true %></li>
+<% unless @tags.blank? %>
+<% @tags.each do |tag| %>
+<li ondrop="setTag(event)" ondragover="allowDrop(event)" class="tag-li" name="<%= tag.id %>" id="tag_<%= tag.content %>" role="presentation"><%= link_to tag.content, tag, remote: true, id: "tag_#{tag.id}" %></li>
+<% end %>
+<% end %>

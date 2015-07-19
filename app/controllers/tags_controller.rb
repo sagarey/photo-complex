@@ -10,6 +10,7 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.json
   def show
+    @photos = @tag.photos.order(created_at: :desc).page params[:page]
   end
 
   # GET /tags/new
