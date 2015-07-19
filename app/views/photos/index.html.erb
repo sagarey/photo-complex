@@ -191,6 +191,25 @@ function setTag(event){
   });
 }
 
+function addTag(event){
+  event.preventDefault();
+  var tag_id = event.dataTransfer.getData("tag_id").split('_').pop();
+  var photo_id = event.target.id.split('_').pop();
+  var formdata = new FormData();
+  formdata.append('tag_id', tag_id);
+  $.ajax({
+    type: 'POST',
+    url: '<%= photos_path %>/' + photo_id + '/addtag.js',
+    data: formdata,
+    contentType: false,
+    processData: false,
+    success: function(result){
+    },
+    error: function(){
+    }
+  });
+}
+
 function getPic(event){
   event.dataTransfer.setData("photo_id", event.target.id);
   $('#trash').fadeIn();
