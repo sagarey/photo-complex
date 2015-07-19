@@ -2,7 +2,7 @@
   <div class="panel panel-default photo-panel">
     <div class="panel-body">
       <div class="thumbnail">
-        <%= link_to image_tag(photo.picture.thumb.url, id: "photo_#{photo.id}"), photo, "draggable": true, "ondragover": "allowDrop(event)", "ondragstart": "getPic(event)", "ondragend": "endDrag(event)", "ondrop": "addTag(event)" %>
+        <%= link_to image_tag(photo.picture.thumb.url, id: "photo_#{photo.id}"), "#{photo_path(photo)}.js", "draggable": true, "ondragover": "allowDrop(event)", "ondragstart": "getPic(event)", "ondragend": "endDrag(event)", "ondrop": "addTag(event)", remote: true %>
       </div>
     </div>
     <ul class="list-group">
