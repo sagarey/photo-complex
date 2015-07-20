@@ -14,7 +14,7 @@
       </li>
     </ul>
     <div class="panel-footer">
-      <%= photo.title %>
+      <%= photo.title.truncate(20) %>
       <span class="badge pull-right"><i class="fa fa-clock-o"></i> <%= photo.created_at.getlocal("+08:00").to_s[0..9] %></span>
     </div>
   </div>

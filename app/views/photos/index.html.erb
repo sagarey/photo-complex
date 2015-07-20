@@ -96,7 +96,7 @@
         <div class="modal-body">
           <div  class="row">
             <div class="col-md-12">
-              <div class="thumbnail preview-thumbnail">
+              <div class="thumbnail">
                 <img id="pic_show" src="" alt="">
               </div>
             </div>
@@ -122,8 +122,8 @@
     $('#pic_file').bind('change', function(){
       file = this.files[0];
       var size_in_megabytes = file.size/1024/1024;
-      if (size_in_megabytes > 5) {
-        alert('Maximum file size is 5MB. Please choose a smaller file.');
+      if (size_in_megabytes > 2) {
+        alert('Maximum file size is 2MB. Please choose a smaller file.');
       }
       var reader = new FileReader();
       reader.onload = function(event){
