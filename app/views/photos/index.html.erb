@@ -86,6 +86,25 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="photo_show" tabindex="-1" role="dialog" aria-labelledby="photo_show_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="photo_show_label">Show photo</h4>
+        </div>
+        <div class="modal-body">
+          <div  class="row">
+            <div class="col-md-12">
+              <div class="thumbnail">
+                <img id="pic_show" src="" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <script>
     active = "tag_all";
     $('#' + active).addClass('active');
@@ -103,8 +122,8 @@
     $('#pic_file').bind('change', function(){
       file = this.files[0];
       var size_in_megabytes = file.size/1024/1024;
-      if (size_in_megabytes > 5) {
-        alert('Maximum file size is 5MB. Please choose a smaller file.');
+      if (size_in_megabytes > 2) {
+        alert('Maximum file size is 2MB. Please choose a smaller file.');
       }
       var reader = new FileReader();
       reader.onload = function(event){
