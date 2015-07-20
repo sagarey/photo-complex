@@ -7,7 +7,6 @@ gem 'font-awesome-sass'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'sqlite3'
 gem 'jbuilder', '~> 2.0'
 gem 'carrierwave'
 gem 'mini_magick'
@@ -17,8 +16,13 @@ gem 'carrierwave-aliyun'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
+  gem 'sqlite3'
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'pry-rails'
+end
+
+group :production do
+  gem 'pg'
 end
