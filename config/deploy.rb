@@ -10,17 +10,18 @@ require 'mina/git'
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
+set :user, 'saga'
 set :domain, '114.215.89.183'
 set :deploy_to, '/home/saga/photo-complex'
 set :repository, 'git@github.com:sagarey/photo-complex.git'
-set :branch, 'master'
+set :branch, 'develop'
 
 # For system-wide RVM install.
 #   set :rvm_path, '/usr/local/rvm/bin/rvm'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'log']
+set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'log', 'config/initializers/carrierwave.rb']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -48,16 +49,20 @@ task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/config"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/config"]
 
+  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/config/initializers"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/config/initializers"]
+
   queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
   queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
-  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml' and 'secrets.yml'."]
+  queue! %[touch "#{deploy_to}/#{shared_path}/config/initializers/carrierwave.rb"]
+  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml', 'secrets.yml' and 'initializers/carrierwave.rb'."]
 
-  queue %[
-    repo_host=`echo $repo | sed -e 's/.*@//g' -e 's/:.*//g'` &&
-    repo_port=`echo $repo | grep -o ':[0-9]*' | sed -e 's/://g'` &&
-    if [ -z "${repo_port}" ]; then repo_port=22; fi &&
-    ssh-keyscan -p $repo_port -H $repo_host >> ~/.ssh/known_hosts
-  ]
+  # queue %[
+  #   repo_host=`echo $repo | sed -e 's/.*@//g' -e 's/:.*//g'` &&
+  #   repo_port=`echo $repo | grep -o ':[0-9]*' | sed -e 's/://g'` &&
+  #   if [ -z "${repo_port}" ]; then repo_port=22; fi &&
+  #   ssh-keyscan -p $repo_port -H $repo_host >> ~/.ssh/known_hosts
+  # ]
 end
 
 desc "Deploys the current version to the server."
